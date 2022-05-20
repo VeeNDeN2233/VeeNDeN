@@ -8,8 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@ryancavanaugh/jquery.autosize": "3.0.14-alpha",
+    "@types/jquery.autosize": "3.0.29",
     "@vue/cli-plugin-babel": "4.1.1",
+    "autosize": "5.0.1",
     "components": "0.1.0",
+    "jquery": "3.6.0",
+    "jquery-autosize": "1.18.18",
+    "retyped-jquery.autosize-tsd-ambient": "3.0.7-0",
     "src": "1.1.2",
     "vue": "^2.6.11"
   },

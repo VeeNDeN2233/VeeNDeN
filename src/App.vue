@@ -8,87 +8,32 @@
       body-id="modalBody"
       @close="toggleModal"
     >
-      <template #header> Наши правила по работе </template>
-      <template #body>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-          debitis deserunt doloremque ducimus eum facilis iure labore laborum,
-          odio officia optio pariatur, placeat quos rem, rerum sapiente sed
-          temporibus velit.
-        </p>
-      </template>
     </Modal>
-    <div class="originWindow">
-      <div class="headerWindow">
-        <button class="btnWindowExit"></button>
-      </div>
-      <div class="halloText">
-        Безусловно, все те кто общается с ОС Linux хоть раз да имели дело(во
-        всяком случае слышали точно) с командной оболочкой BASH. Но BASH не
-        только командная оболочка, это еще и превосходный скриптовый язык
-        программирования. Цель этой статьи — познакомить поближе юзеров с bash,
-        рассказать про синтаксис, основные приемы и фишки языка, для того чтобы
-        даже обычный пользователь смог быстренько написать простой скрипт для
-        выполнения ежедневной(-недельной, -месячной) рутинной работы или,
-        скажем, «на коленке» наваять скриптик для бэкапа директории.
-      </div>
-      <div class="footerWindow">
-        <button @click="toggleModal">Open Modal</button>
-      </div>
+
+    <Menu> </Menu>
+
+    <div class="footerWindow">
+      <button @click="toggleModal">Open Modal</button>
     </div>
+
+    <div
+      id="box"
+      style="width: 50px; height: 50px; background-color: red"
+    ></div>
   </div>
 </template>
 
 
 <script>
+import $ from "jquery";
 import Modal from "./components/Modal";
 import Continue from "./components/Continue";
+import Menu from "./components/Menu";
 export default {
   components: {
     Modal,
     Continue,
+    Menu,
   },
   data: () => ({
     isShowModal: false,
@@ -99,10 +44,57 @@ export default {
     },
   },
 };
+
+// ТЕРМИНАЛ // // // // // // // // // // / / / / / /
+$(function () {
+  $(".terminal").on("click", function () {
+    $("#input").focus();
+  });
+
+  $("#input").on("keydown", function search(e) {
+    if (e.keyCode == 13) {
+      // append your output to the history,
+      // here I just append the input
+      $("#history").append($(this).val() + "<br/>");
+
+      // you can change the path if you want
+      // crappy implementation here, but you get the idea
+      if ($(this).val().substring(0, 3) === "cd ") {
+        $("#path").html($(this).val().substring(3) + "&nbsp;>&nbsp;");
+      }
+
+      // clear the input
+      $("#input").val("");
+    }
+  });
+});
+
+// // // // // // // // // // // //
+
+$(document).ready(function () {
+  $(".run").click(function () {
+    $("#box")
+      .animate({ opacity: "0.1", left: "+=400" }, 1200)
+      .animate(
+        { opacity: "0.4", top: "+=160", height: "20", width: "20" },
+        "slow"
+      )
+      .animate({ opacity: "1", left: "0", height: "100", width: "100" }, "slow")
+      .animate({ top: "0" }, "fast")
+      .slideUp()
+      .slideDown("slow");
+    return false;
+  });
+});
 </script>
 
 
 <style>
+.consol {
+  display: flex;
+  flex-direction: column;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -121,16 +113,6 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: row;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-html {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -144,10 +126,18 @@ html {
   );
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .originWindow {
   width: 35%;
   order: 1;
   background-color: black;
+  position: relative;
 }
 
 .headerWindow {
@@ -174,7 +164,45 @@ html {
 }
 
 .footerWindow {
-  height: 10%;
+  /* position: absolute; */
+  bottom: 0;
+  right: 0;
+}
+
+body {
+  background-color: #ececec;
+  background: linear-gradient(135deg, #0f55e4, #0a3a9c);
+  color: #fff;
+  /*padding: 0.5em 1em;*/
+  -webkit-font-smoothing: antialiased;
+}
+
+.terminal {
+  background: black;
+  color: white;
+  font: courier;
+  padding: 10px;
+  height: 100px;
+  overflow: scroll;
+}
+
+.line {
+  display: table;
+  width: 100%;
+}
+
+.terminal span {
+  display: table-cell;
+  width: 1px;
+}
+
+.terminal input {
+  display: table-cell;
+  width: 100%;
+  border: none;
+  background: black;
+  color: white;
+  outline: none;
 }
 </style>
 
